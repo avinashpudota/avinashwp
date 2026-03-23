@@ -246,7 +246,7 @@ function remove_directory($dir) {
 function get_current_url() {
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
-    $script = dirname($_SERVER['SCRIPT_NAME']);
+    $script = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
     
     return $protocol . '://' . $host . $script;
 }
