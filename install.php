@@ -520,7 +520,7 @@ function render_installer_form(?string $error): void {
         <div class="alert alert-error" style="margin-top:20px;"><?php echo e($error); ?></div>
     <?php endif; ?>
 
-    <form method="post" id="installForm" autocomplete="off">
+    <form method="post" id="installForm" autocomplete="on">
 
         <!-- ── DirectAdmin Credentials ── -->
         <div class="section-header">DirectAdmin Account <span class="badge">Required</span></div>
@@ -530,6 +530,7 @@ function render_installer_form(?string $error): void {
             <input type="text" id="da_user" name="da_user" required
                    placeholder="your_da_username"
                    value="<?php echo e($_POST['da_user'] ?? ''); ?>"
+                   autocomplete="username"
                    oninput="updatePreviews()">
             <div class="hint">Your DirectAdmin login username (also used as DB prefix)</div>
         </div>
@@ -537,7 +538,7 @@ function render_installer_form(?string $error): void {
         <div class="form-group">
             <label for="da_pass">DirectAdmin Password</label>
             <div class="input-with-toggle">
-                <input type="password" id="da_pass" name="da_pass" required placeholder="DirectAdmin password">
+                <input type="password" id="da_pass" name="da_pass" required placeholder="DirectAdmin password" autocomplete="current-password">
                 <button type="button" class="toggle-pass" onclick="togglePass('da_pass', this)">Show</button>
             </div>
             <div class="hint">Used only to call the DirectAdmin API to create your database</div>
