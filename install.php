@@ -158,7 +158,7 @@ function sanitize_folder_name($folder_name) {
 }
 
 function create_installation_directory($folder_name) {
-    $install_path = __DIR__ . '/' . $folder_name;
+    $install_path = $_SERVER['DOCUMENT_ROOT'] . '/' . $folder_name;
     if (!file_exists($install_path)) {
         if (!mkdir($install_path, 0755, true)) {
             throw new Exception("Failed to create directory: $folder_name");
@@ -296,8 +296,7 @@ function generate_password($length = 20) {
 function get_current_url() {
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
     $host     = $_SERVER['HTTP_HOST'];
-    $script   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-    return $protocol . '://' . $host . $script;
+    return $protocol . '://' . $host;
 }
 
 function get_da_base_url($port) {
