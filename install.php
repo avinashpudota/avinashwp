@@ -9,6 +9,8 @@ $wordpress_url   = 'https://wordpress.org/latest.zip';
 $plugin_url      = 'https://github.com/avinashpudota/wpsetup/archive/refs/heads/main.zip';
 $access_password = 'xxxx';
 $da_port         = 2222;
+$da_user_default = 'xxxx';
+$da_pass_default = 'xxxx';
 
 // Password protection
 session_start();
@@ -30,14 +32,12 @@ if (!$is_authenticated) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['folder_name'])) {
     $folder_name = sanitize_folder_name($_POST['folder_name']);
-    $da_user     = trim($_POST['da_user'] ?? '');
-    $da_pass     = trim($_POST['da_pass'] ?? '');
+    $da_user     = $da_user_default;
+    $da_pass     = $da_pass_default;
     $db_name_raw = preg_replace('/[^a-zA-Z0-9_]/', '', trim($_POST['db_name'] ?? ''));
 
     if (empty($folder_name)) {
         $error = "Please enter a valid folder name.";
-    } elseif (empty($da_user) || empty($da_pass)) {
-        $error = "DirectAdmin username and password are required.";
     } elseif (empty($db_name_raw)) {
         $error = "Please enter a database name.";
     } else {
@@ -449,23 +449,7 @@ function show_summary($r) { ?>
 
     <form method="post" id="installForm" autocomplete="on">
 
-        <div class="section">DirectAdmin Account</div>
-        <div class="two-col">
-            <div class="form-group">
-                <label for="da_user">Username</label>
-                <input type="text" id="da_user" name="da_user" required
-                       autocomplete="username" placeholder="your_da_username"
-                       value="<?php echo htmlspecialchars($_POST['da_user'] ?? ''); ?>"
-                       oninput="updatePreviews()">
-            </div>
-            <div class="form-group">
-                <label for="da_pass">Password</label>
-                <div class="pass-wrap">
-                    <input type="password" id="da_pass" name="da_pass" required autocomplete="current-password" placeholder="DA password">
-                    <button type="button" class="pass-toggle" onclick="togglePass()">Show</button>
-                </div>
-            </div>
-        </div>
+
 
         <div class="section">WordPress Installation Path</div>
         <div class="form-group">
@@ -503,18 +487,10 @@ function show_summary($r) { ?>
 <script>
 function updatePreviews() {
     var folder = document.getElementById('folder_name').value.trim().replace(/^\/+|\/+$/g,'');
-    var user   = document.getElementById('da_user').value.trim();
     var db     = document.getElementById('db_name').value.trim();
     var base   = '<?php echo get_current_url(); ?>';
     document.getElementById('url_preview').innerHTML = base + '/' + (folder || '<em>folder</em>');
-    document.getElementById('db_preview').textContent = (user||'username') + '_' + (db||'dbname');
-}
-
-function togglePass() {
-    var f = document.getElementById('da_pass');
-    var b = f.nextElementSibling;
-    if (f.type === 'password') { f.type = 'text';     b.textContent = 'Hide'; }
-    else                       { f.type = 'password'; b.textContent = 'Show'; }
+    document.getElementById('db_preview').textContent = 'wp26highladder_' + (db||'dbname');
 }
 
 function showLoading() {
