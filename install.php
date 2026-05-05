@@ -37,6 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['folder_name'])) {
     $da_pass     = $da_pass_default;
     $use_directadmin = directadmin_credentials_available($da_user, $da_pass);
     $db_name_raw = preg_replace('/[^a-zA-Z0-9_]/', '', trim($_POST['db_name'] ?? ''));
+    if (empty($db_name_raw)) {
+        $db_name_raw = preg_replace('/[^a-zA-Z0-9_]/', '', str_replace('/', '', $folder_name));
+    }
 
     if (empty($folder_name)) {
         $error = "Please enter a valid folder name.";
@@ -506,7 +509,7 @@ $directadmin_configured = directadmin_credentials_available($da_user_default, $d
             <input type="text" id="folder_name" name="folder_name" required
                    placeholder="e.g. demo1 or 03/test or clients/acme"
                    value="<?php echo htmlspecialchars($_POST['folder_name'] ?? ''); ?>"
-                   oninput="updatePreviews()">
+                   oninput="syncDatabaseName(); updatePreviews()">
             <div class="preview">URL: <span id="url_preview"><?php echo htmlspecialchars(get_current_url()); ?>/<em>folder</em></span></div>
         </div>
 
@@ -546,6 +549,11 @@ function updatePreviews() {
     var daUser = '<?php echo addslashes($da_user_default); ?>';
     document.getElementById('url_preview').innerHTML = base + '/' + (folder || '<em>folder</em>');
     document.getElementById('db_preview').textContent = daEnabled ? daUser + '_' + (db||'dbname') : 'DirectAdmin disabled';
+}
+
+function syncDatabaseName() {
+    var folder = document.getElementById('folder_name').value.trim().replace(/^\/+|\/+$/g,'');
+    document.getElementById('db_name').value = folder.replace(/\//g, '');
 }
 
 function showLoading() {
