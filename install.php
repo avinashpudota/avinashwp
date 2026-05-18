@@ -7,7 +7,7 @@
 // Configuration
 $wordpress_url   = 'https://wordpress.org/latest.zip';
 $plugin_url      = 'https://github.com/avinashpudota/wpsetup/archive/refs/heads/main.zip';
-$site_settings_plugin_url = 'https://github.com/avinashpudota/wp-site-settings/archive/refs/heads/main.zip';
+$site_settings_plugin_url = 'https://github.com/avinashpudota/wp-site-settings/archive/refs/heads/master.zip';
 $access_password = 'xxxx';
 $da_port         = 2222;
 $da_user_default = '';
